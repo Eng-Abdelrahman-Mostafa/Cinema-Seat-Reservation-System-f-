@@ -112,3 +112,16 @@ let updateSeatColors () =
         | :? Button as btn -> 
             btn.BackColor <- Color.FromArgb(191, 255, 251)  
         | _ -> ()
+
+btnLoadReservedSeats.Click.Add(fun _ ->
+    let selectedTimeSlot = cmbTimeSlot.SelectedItem :?> string
+    if String.IsNullOrEmpty(selectedTimeSlot) then
+        MessageBox.Show("Please select a time slot to load reserved seats.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning) |> ignore
+    else
+        reservedSeats.Clear() 
+        loadReservedSeats selectedTimeSlot  
+
+        updateSeatColors()
+        
+        MessageBox.Show("Reserved seats have been loaded.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information) |> ignore
+)        

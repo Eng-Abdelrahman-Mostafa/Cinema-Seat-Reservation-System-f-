@@ -25,7 +25,35 @@ let btnBook = new Button(Text = "Book Seat", Location = Point(50, 450), Width = 
 let btnLoadReservedSeats = new Button(Text = "Load Reserved Seats", Location = Point(200, 450), Width = 150)
 
 //checkList define by Array
+
 let timeSlots = [| "02:00 PM"; "04:00 PM"; "06:00 PM" |]
 cmbTimeSlot.Items.AddRange(timeSlots |> Array.map box) // string-> obj in checkList 
+
 // passing all textBooxes 
 form.Controls.AddRange([| lblRow; lblCol; txtRow; txtCol; lblCustomer; txtCustomer; lblTime; cmbTimeSlot; btnBook; btnLoadReservedSeats |])
+
+
+let rows = 5
+let cols = 8
+let seatSize = 50
+let seatLayout = Array2D.init rows cols (fun row col -> sprintf "%c%d" (char (row + int 'A')) (col + 1))
+let reservedSeats = new HashSet<string>() //using Hash set why ??
+//patern Matching Req
+let getTicketFilePath timeSlot =
+    match timeSlot with // like switch 
+    | "02:00 PM" -> "tickets.txt"
+    | "04:00 PM" -> "tickets1.txt"
+    | "06:00 PM" -> "tickets2.txt"
+    | _ -> "tickets.txt"  //Default
+    
+
+let loadReservedSeats timeSlot =
+    let filePath = getTicketFilePath timeSlot
+    if File.Exists(filePath) then
+        File.ReadLines(filePath)
+        |> Seq.iter (fun line ->
+            let parts = line.Split(',')
+            if parts.Length >= 3 then // checking valid data formate
+                let seat = parts.[1].Split(':').[1].Trim() //trim remove any extra spaces
+                reservedSeats.Add(seat) |> ignore
+        )

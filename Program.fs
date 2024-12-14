@@ -104,3 +104,11 @@ btnBook.Click.Add(fun _ ->
     else
         bookSeat row col customer
 )
+let updateSeatColors () =  
+    for button in panel.Controls do
+        match button with
+        | :? Button as btn when reservedSeats.Contains(btn.Text) -> 
+            btn.BackColor <- Color.Red  
+        | :? Button as btn -> 
+            btn.BackColor <- Color.FromArgb(191, 255, 251)  
+        | _ -> ()

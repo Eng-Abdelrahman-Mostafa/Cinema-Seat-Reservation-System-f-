@@ -125,3 +125,11 @@ btnLoadReservedSeats.Click.Add(fun _ ->
         
         MessageBox.Show("Reserved seats have been loaded.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information) |> ignore
 )        
+for row in 0 .. rows - 1 do
+    for col in 0 .. cols - 1 do
+        let seatName = seatLayout.[row, col]
+        let button = new Button(Text = seatName, Size = Size(seatSize, seatSize), Location = Point(col * seatSize + 10, row * seatSize + 10))
+        button.BackColor <- Color.FromArgb(191, 255, 251)
+        panel.Controls.Add(button)
+
+Application.Run(form)

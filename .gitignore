@@ -1,0 +1,44 @@
+# .NET build output
+bin/
+obj/
+
+# User-specific files
+.idea/
+.vs/
+.vscode/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# User-specific files (Windows)
+Thumbs.db
+Desktop.ini
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Backup files
+*~ 
+*.bak
+*.swp
+*.swo
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# F# specific
+.fsproj.user
+
+# JetBrains Rider
+.idea/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt

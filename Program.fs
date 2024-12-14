@@ -57,3 +57,33 @@ let loadReservedSeats timeSlot =
                 let seat = parts.[1].Split(':').[1].Trim() //trim remove any extra spaces
                 reservedSeats.Add(seat) |> ignore
         )
+        let saveTicketDetails ticketID seat customer ticketFilePath =  
+    let ticketDetails = sprintf "Ticket ID: %s, Seat: %s, Customer: %s" ticketID seat customer
+    File.AppendAllText(ticketFilePath, ticketDetails + Environment.NewLine)
+
+
+let bookSeat (row: string) (col: string) (customer: string) =
+    try
+        let rowIndex = int row.[0] - int 'A'
+        let colIndex = int col - 1
+        if rowIndex < 0 || rowIndex >= rows || colIndex < 0 || colIndex >= cols then  // for checking that i ididnt breake the outline
+            MessageBox.Show("Invalid seat coordinates!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
+        else
+            let seat = seatLayout.[rowIndex, colIndex]
+            if reservedSeats.Contains(seat) then
+                MessageBox.Show(sprintf "Seat %s is already reserved!" seat, "Reservation Error", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
+            else
+                reservedSeats.Add(seat) |> ignore
+
+                let ticketID = Guid.NewGuid().ToString() //making new iD
+
+                let ticketFilePath = getTicketFilePath (cmbTimeSlot.SelectedItem :?> string)
+                saveTicketDetails ticketID seat customer ticketFilePath
+
+                for button in panel.Controls do  // after choosing index iterate over Arr to know where this index and make it red
+                    match button with
+                    | :? Button as btn when btn.Text = seat -> btn.BackColor <- Color.Red
+                    | _ -> ()
+                MessageBox.Show(sprintf "Seat %s has been reserved.\nTicket ID: %s" seat ticketID, "Reservation Successful", MessageBoxButtons.OK, MessageBoxIcon.Information) |> ignore
+    with
+    | _ -> MessageBox.Show("Invalid input! Please enter a valid row and column.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore

@@ -87,3 +87,20 @@ let bookSeat (row: string) (col: string) (customer: string) =
                 MessageBox.Show(sprintf "Seat %s has been reserved.\nTicket ID: %s" seat ticketID, "Reservation Successful", MessageBoxButtons.OK, MessageBoxIcon.Information) |> ignore
     with
     | _ -> MessageBox.Show("Invalid input! Please enter a valid row and column.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error) |> ignore
+
+btnBook.Click.Add(fun _ ->
+    let row = txtRow.Text.Trim().ToUpper()
+    let col = txtCol.Text.Trim()
+    let customer = txtCustomer.Text.Trim()
+
+
+    let selectedTimeSlot = cmbTimeSlot.SelectedItem :?> string
+
+
+    let ticketFilePath = getTicketFilePath selectedTimeSlot
+
+    if row = "" || col = "" || customer = "" then   // cehcking That all data had been writen
+        MessageBox.Show("All fields are required!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning) |> ignore
+    else
+        bookSeat row col customer
+)
